@@ -1,0 +1,161 @@
+<div class="container" id="main-container">
+  <nav class="navbar navbar-light bg-light">
+    <span class="navbar-brand mb-0 h1">Posts</span>
+  </nav>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Title</th>
+      <th scope="col">Show</th>
+      <th scope="col">Update</th>
+      <th scope="col">Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of dataObj">
+      <td>{{data.id}}</td>
+      <td>{{data.title}}</td>
+      <td><button class="btn btn-info" (click)="showData(data.id)">Show</button></td>
+      <td><button class="btn btn-secondary" id="{{data.id}}_u" (click)="updateData(data)">Update</button></td>
+      <td><button class="btn btn-warning" id="{{data.id}}" (click)="deleteData(data.id , template)">Delete</button></td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-3"></div>
+    <div class="col-lg-6 col-md-6 col-sm-6">
+      <button class="btn btn-primary" id="create-btn" (click)="enableForm()">Create Post</button>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-3"></div>
+
+  </div>
+
+</div>
+<div *ngIf="specificData" id="display-image" class="container">
+  <!--<div class="row">
+   <div class="col-lg-3 col-md-3 col-sm-6">ID</div>
+    <div class="col-lg-3 col-md-3 col-sm-6">{{specificData.id}}</div>
+  </div>-->
+  <div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6">Title</div>
+    <div class="col-lg-3 col-md-3 col-sm-6">{{specificData.title}}</div>
+  </div>
+  <div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6">Content</div>
+    <div class="col-lg-6 col-md-6 col-sm-6">{{specificData.content}}</div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6">Lat</div>
+    <div class="col-lg-3 col-md-3 col-sm-6">{{specificData.lat}}</div>
+  </div>
+  <div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6">Long</div>
+    <div class="col-lg-3 col-md-3 col-sm-6">{{specificData.long}}</div>
+  </div>
+  <!--<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-6">Image</div>
+    <div class="col-lg-3 col-md-3 col-sm-6">
+      <img src="{{specificData.image_url}}" alt="{{specificData.title}}">
+    </div>
+
+  </div>-->
+
+  <agm-map [latitude]="specificData.lat" [longitude]="specificData.long">
+    <agm-overlay
+      [latitude]="specificData.lat"
+      [longitude]="specificData.long">
+      <div><img style="cursor: pointer;" src="{{specificData.image_url}}"/></div>
+    </agm-overlay>
+    <!--<agm-marker [iconUrl]="specificData.image_url" [latitude]="specificData.lat"
+    [longitude]="specificData.long"></agm-marker>-->
+  </agm-map>
+</div>
+
+<div class="container" id="create-post-container">
+      <form [formGroup]="imageForm" *ngIf="isCreateFormShow">
+        <div class="form-group">
+          <div class="row" id="title-row">
+            <div class="col-md-3 col-lg-3 col-sm-12">
+              <label for="image-title">Title</label>
+            </div>
+            <div class="col-md-6 col-lg-6 col-sm-12">
+              <input type="text" class="form-control" formControlName="titleValue" id="image-title" required>
+            </div>
+        </div>
+          <div class="row" id="content-row">
+            <div class="col-md-3 col-lg-3 col-sm-12">
+              <label for="image-content">Content</label>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12">
+              <input type="text" class="form-control" formControlName="contentValue" id="image-content" required>
+            </div>
+          </div>
+
+          <div class="row" id="lat-row">
+            <div class="col-md-3 col-lg-3 col-sm-12">
+              <label for="image-lat">Lat</label>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12">
+              <input type="number" class="form-control" formControlName="latValue" id="image-lat">
+            </div>
+          </div>
+
+          <div class="row" id="long-row">
+            <div class="col-md-3 col-lg-3 col-sm-12">
+              <label for="image-long">Long</label>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12">
+              <input type="number" class="form-control" formControlName="longValue" id="image-long">
+            </div>
+          </div>
+
+          <div class="row" id="image-row">
+            <div class="col-md-3 col-lg-3 col-sm-12">
+              <label for="image-url">URL</label>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12">
+              <input type="url " class="form-control" formControlName="imgURLValue" id="image-url">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12"></div>
+            <div class="col-lg-3 col-md-3 col-sm-12">
+              <button class="btn btn-primary" (click)="submitCall(template)">Submit</button>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+              <button class="btn btn-secondary" (click)="updateDataCall()" [disabled]="!updateCallBtn">Update Data</button>
+            </div>
+
+          </div>
+        </div>
+      </form>
+
+  <ng-template #template>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Success</h4>
+      <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close" (click)="hide()">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      DONE!!
+    </div>
+    <div class="modal-footer">
+      <button type="button" data-dismiss="modal" class="btn btn-success" (click)="hide()">OK</button>
+    </div>
+  </ng-template>
+</div>
+
+<footer class="page-footer bg-light">
+  <div class="container-fluid text-center text-md-left">
+    <div class="footer-copyright text-center py-3">© 2020 Copyright:
+      <a href="https://google.com/"> Google.com</a>
+    </div>
+  </div>
+</footer>
+
+
